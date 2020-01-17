@@ -31,8 +31,6 @@ WORKDIR /opt/interlok
 COPY builder /root/builder
 
 RUN  \
-    curl -fsSL -o /usr/local/bin/gosu -q ${GOSU_BASE_URL}/${GOSU_VERSION}/gosu-amd64 && \
-    chmod +x /usr/local/bin/gosu && \
     curl -fsSL -o base-filesystem.zip -q ${BASE_URL}/base-filesystem.zip && \
     curl -fsSL -o runtime-libraries.zip ${BASE_URL}/runtime-libraries.zip && \
     unzip -o -q  runtime-libraries.zip && \
