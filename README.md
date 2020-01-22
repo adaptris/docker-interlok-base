@@ -1,5 +1,4 @@
-# Interlok base image for Docker Hub 
-[![Docker Pulls](https://img.shields.io/docker/pulls/adaptris/interlok-base.svg)](https://hub.docker.com/r/adaptris/interlok-base/)
+# Interlok base image for Docker Hub [![Docker Pulls](https://img.shields.io/docker/pulls/adaptris/interlok-base.svg)](https://hub.docker.com/r/adaptris/interlok-base/)
 
 Base Docker image of the adapter using a nightly build
 
