@@ -19,10 +19,10 @@ RUN yum -y install curl unzip shadow-utils gnupg2 && \
 RUN  \
     curl -fsSL -o /usr/local/bin/gosu -q ${GOSU_BASE_URL}/${GOSU_VERSION}/gosu-amd64;  \
     curl -fsSL -o /usr/local/bin/gosu.asc -q ${GOSU_BASE_URL}/${GOSU_VERSION}/gosu-amd64.asc; \
-	  export GNUPGHOME="$(mktemp -d)"; \
-	  gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4; \
+    export GNUPGHOME="$(mktemp -d)"; \
+    gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4; \
     gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \
-	  rm -rf "$GNUPGHOME" /usr/local/bin/gosu.asc; \
+    rm -rf "$GNUPGHOME" /usr/local/bin/gosu.asc; \
     chmod +x /usr/local/bin/gosu; \
     gosu --version
 
@@ -32,10 +32,7 @@ COPY builder /root/builder
 
 RUN  \
     curl -fsSL -o base-filesystem.zip -q ${BASE_URL}/base-filesystem.zip && \
-    curl -fsSL -o runtime-libraries.zip ${BASE_URL}/runtime-libraries.zip && \
-    unzip -o -q  runtime-libraries.zip && \
     unzip -o -q  base-filesystem.zip && \
-    rm -rf /opt/interlok/optional /opt/interlok/lib/interlok-flatfile.jar /opt/interlok/lib/interlok-mail.jar && \
     chmod +x /docker-entrypoint.sh && \
     rm -rf *.zip && \
     cd /root/builder && \

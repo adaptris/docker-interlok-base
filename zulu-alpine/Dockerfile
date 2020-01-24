@@ -20,10 +20,7 @@ COPY builder /root/builder
 
 RUN  \
     curl -fsSL -o base-filesystem.zip -q ${BASE_URL}/base-filesystem.zip && \
-    curl -fsSL -o runtime-libraries.zip ${BASE_URL}/runtime-libraries.zip && \
-    unzip -o -q  runtime-libraries.zip && \
     unzip -o -q  base-filesystem.zip && \
-    rm -rf /opt/interlok/optional /opt/interlok/lib/interlok-flatfile.jar /opt/interlok/lib/interlok-mail.jar && \
     chmod +x /docker-entrypoint.sh && \
     rm -rf *.zip && \
     cd /root/builder && \
