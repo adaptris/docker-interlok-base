@@ -1,4 +1,4 @@
-FROM azul/zulu-openjdk-alpine:8-jre
+FROM azul/zulu-openjdk-alpine:8
 
 LABEL maintainer="Adaptris"
 
