@@ -1,4 +1,4 @@
-FROM openjdk:8-jre-slim
+FROM openjdk:8-jdk-slim
 
 LABEL maintainer="Adaptris"
 
@@ -22,7 +22,7 @@ COPY builder /root/builder
 
 RUN  \
     curl -fsSL -o base-filesystem.zip -q ${BASE_URL}/base-filesystem.zip && \
-    unzip -o -q  base-filesystem.zip && \
+    unzip -o -q  base-filesystem.zip config/* && \
     chmod +x /docker-entrypoint.sh && \
     rm -rf *.zip && \
     cd /root/builder && \

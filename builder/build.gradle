@@ -3,12 +3,11 @@ plugins {
 }
 
 ext {
-  interlokCoreVersion = project.hasProperty('interlokCoreVersion') ? project.getProperty('interlokCoreVersion') : '3.10-SNAPSHOT'
-  interlokWarVersion = project.hasProperty('interlokWarVersion') ? project.getProperty('interlokWarVersion') : interlokCoreVersion
+  interlokCoreVersion = project.findProperty('interlokCoreVersion') ?: '3.10-SNAPSHOT'
+  interlokWarVersion = project.findProperty('interlokWarVersion') ?: interlokCoreVersion
+  nexusBaseUrl = project.findProperty('nexusBaseUrl') ?: 'https://nexus.adaptris.net/nexus'
+  interlokInstallDirectory = project.findProperty('interlokInstallDirectory') ?:  "/opt/interlok"
 
-  nexusBaseUrl = project.hasProperty('nexusBaseUrl') ? project.getProperty('nexusBaseUrl') : 'https://nexus.adaptris.net/nexus'
-
-  interlokInstallDirectory = project.hasProperty('interlokInstallDirectory') ? project.getProperty('interlokInstallDirectory') :  "/opt/interlok"
   log4j2Version = '2.13.3'
   slf4jVersion = '1.7.30'
 }
@@ -17,7 +16,11 @@ distTar.enabled=false
 distZip.enabled=true
 
 repositories {
-  mavenCentral()
+  mavenCentral() {
+    content {
+      excludeGroupByRegex "com\\.adaptris.*"
+    }
+  }
   maven { url "$nexusBaseUrl/content/groups/public" }
   maven { url "$nexusBaseUrl/content/groups/interlok" }
 }
@@ -39,33 +42,38 @@ configurations() {
   all*.exclude group: 'com.vaadin.external.google', module: 'android-json'
   all*.exclude group: 'javax.el', module: 'javax.el-api'
   all*.exclude group: 'org.hibernate', module: 'hibernate-validator'
+  // INTERLOK-3197 exclude old javax.mail
+  all*.exclude group: 'com.sun.mail', module: 'javax.mail'
+  all*.exclude group: 'javax.validation', module: 'validation-api'
+  all*.exclude group: 'javax.activation', module: 'activation'
+  all*.exclude group: 'javax.activation', module: 'javax.activation-api'
 }
 
 configurations.all {
-  resolutionStrategy.cacheChangingModulesFor 0, "seconds"
+  resolutionStrategy.cacheChangingModulesFor 15, "minutes"
 }
 
 dependencies {
-  interlokRuntime  group: "com.adaptris", name: "interlok-core-apt", version: "$interlokCoreVersion", changing: true
-  interlokRuntime  group: "com.adaptris", name: "interlok-boot", version: "$interlokCoreVersion", changing: true
-  interlokRuntime  group: "com.adaptris", name: "interlok-common", version: "$interlokCoreVersion", changing: true
-  interlokRuntime  group: "com.adaptris", name: "interlok-logging", version: "$interlokCoreVersion", changing: true
-  interlokRuntime  group: "com.adaptris", name: "interlok-core", version: "$interlokCoreVersion", changing: true
-  interlokRuntime  group: "com.adaptris", name: "interlok-licensing", version: "$interlokCoreVersion", changing: true
-  interlokRuntime  group: "com.adaptris", name: "interlok-varsub", version: "$interlokCoreVersion", changing: true
+  interlokRuntime ("com.adaptris:interlok-core-apt:$interlokCoreVersion") { changing=true }
+  interlokRuntime ("com.adaptris:interlok-boot:$interlokCoreVersion") { changing=true }
+  interlokRuntime ("com.adaptris:interlok-common:$interlokCoreVersion") { changing=true }
+  interlokRuntime ("com.adaptris:interlok-logging:$interlokCoreVersion") { changing=true }
+  interlokRuntime ("com.adaptris:interlok-licensing:$interlokCoreVersion") { changing=true }
+  interlokRuntime ("com.adaptris:interlok-core:$interlokCoreVersion") { changing=true }
 
-  // If you want javadocs.
+  interlokRuntime ("org.slf4j:slf4j-api:$slf4jVersion")
+  interlokRuntime ("org.slf4j:jcl-over-slf4j:$slf4jVersion")
+  interlokRuntime ("org.slf4j:jul-to-slf4j:$slf4jVersion")
+  interlokRuntime ("org.apache.logging.log4j:log4j-core:$log4j2Version")
+  interlokRuntime ("org.apache.logging.log4j:log4j-1.2-api:$log4j2Version")
+  interlokRuntime ("org.apache.logging.log4j:log4j-slf4j-impl:${log4j2Version}")
+  interlokRuntime ("org.apache.logging.log4j:log4j-api:$log4j2Version")
+  interlokRuntime ("com.sun.mail:jakarta.mail:1.6.5")
+  interlokRuntime ("com.sun.activation:jakarta.activation:1.2.2")
+  interlokRuntime ("jakarta.validation:jakarta.validation-api:2.0.2")
+
   interlokJavaDocs group: "com.adaptris", name: "interlok-core", version: "$interlokCoreVersion", changing: true, classifier: "javadoc", transitive: false
-
-  interlokRuntime group: "org.slf4j", name: "slf4j-api", version: "$slf4jVersion"
-  interlokRuntime group: "org.slf4j", name: "jcl-over-slf4j", version: "$slf4jVersion"
-  interlokRuntime group: "org.slf4j", name: "jul-to-slf4j", version: "$slf4jVersion"
-
-  interlokRuntime group: "org.apache.logging.log4j", name: "log4j-core", version: "$log4j2Version"
-  interlokRuntime group: "org.apache.logging.log4j", name: "log4j-1.2-api", version: "$log4j2Version"
-  interlokRuntime group: "org.apache.logging.log4j", name: "log4j-slf4j-impl", version: "$log4j2Version"
-  interlokRuntime group: "org.apache.logging.log4j", name: "log4j-api", version: "$log4j2Version"
-
+  interlokJavaDocs group: "com.adaptris", name: "interlok-common", version: "$interlokCoreVersion", changing: true, classifier: "javadoc", transitive: false
   interlokWar group: "com.adaptris.ui", name: "interlok", version: "$interlokWarVersion", ext: "war", changing: true
 }
 

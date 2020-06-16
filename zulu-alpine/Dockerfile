@@ -1,4 +1,4 @@
-FROM azul/zulu-openjdk-alpine:8-jre
+FROM azul/zulu-openjdk-alpine:8
 
 LABEL maintainer="Adaptris"
 
@@ -7,7 +7,7 @@ ARG INTERLOK_VERSION=3.10-SNAPSHOT
 ARG java_tool_opts
 ENV JAVA_TOOL_OPTIONS=$java_tool_opts
 # JAVA_HOME is set wrong on the latest 8-jre image.
-ENV JAVA_HOME=/usr/lib/jvm/zulu8
+# ENV JAVA_HOME=/usr/lib/jvm/zulu8
 
 RUN apk add --no-cache --update ca-certificates bash curl unzip su-exec && \
     addgroup -S interlok && \
@@ -20,7 +20,7 @@ COPY builder /root/builder
 
 RUN  \
     curl -fsSL -o base-filesystem.zip -q ${BASE_URL}/base-filesystem.zip && \
-    unzip -o -q  base-filesystem.zip && \
+    unzip -o -q  base-filesystem.zip config/* && \
     chmod +x /docker-entrypoint.sh && \
     rm -rf *.zip && \
     cd /root/builder && \
