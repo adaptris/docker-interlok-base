@@ -3,7 +3,8 @@ version: 1
 update_configs:
   - package_manager: "java:gradle"
     directory: "/builder"
-    update_schedule: "daily"
+    update_schedule: "weekly"
+    target_branch: "snapshot"
     default_reviewers:
       - quotidian-ennui
       - aaron-mcgrath-adp
