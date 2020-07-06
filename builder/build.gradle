@@ -3,7 +3,7 @@ plugins {
 }
 
 ext {
-  interlokCoreVersion = project.findProperty('interlokCoreVersion') ?: '3.10-SNAPSHOT'
+  interlokCoreVersion = project.findProperty('interlokCoreVersion') ?: '3.10.2B2-RELEASE'
   interlokWarVersion = project.findProperty('interlokWarVersion') ?: interlokCoreVersion
   nexusBaseUrl = project.findProperty('nexusBaseUrl') ?: 'https://nexus.adaptris.net/nexus'
   interlokInstallDirectory = project.findProperty('interlokInstallDirectory') ?:  "/opt/interlok"
