@@ -3,7 +3,7 @@ FROM openjdk:8-jdk-slim
 LABEL maintainer="Adaptris"
 
 ARG BASE_URL=https://development.adaptris.net/installers/Interlok/latest-stable/
-ARG INTERLOK_VERSION=3.10-SNAPSHOT
+ARG INTERLOK_VERSION=3.11-SNAPSHOT
 ARG java_tool_opts
 ENV JAVA_TOOL_OPTIONS=$java_tool_opts
 
