@@ -2,7 +2,7 @@ FROM azul/zulu-openjdk-alpine:8
 
 LABEL maintainer="Adaptris"
 
-ARG INTERLOK_VERSION=3.11.0
+ARG INTERLOK_VERSION=3.11.1
 ARG BASE_URL=https://development.adaptris.net/installers/interlok/$INTERLOK_VERSION
 ARG java_tool_opts
 ENV JAVA_TOOL_OPTIONS=$java_tool_opts

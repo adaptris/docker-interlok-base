@@ -2,7 +2,7 @@ FROM amazoncorretto:8
 
 LABEL maintainer="Adaptris"
 
-ARG INTERLOK_VERSION=3.11.0
+ARG INTERLOK_VERSION=3.11.1
 ARG BASE_URL=https://development.adaptris.net/installers/interlok/$INTERLOK_VERSION
 ARG GOSU_VERSION=1.11
 ARG GOSU_BASE_URL=https://github.com/tianon/gosu/releases/download/
