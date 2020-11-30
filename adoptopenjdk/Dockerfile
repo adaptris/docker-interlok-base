@@ -1,4 +1,4 @@
-FROM azul/zulu-openjdk-alpine:8
+FROM adoptopenjdk:8-jdk
 
 LABEL maintainer="Adaptris"
 
@@ -6,15 +6,17 @@ ARG INTERLOK_VERSION=3.11.1
 ARG BASE_URL=https://development.adaptris.net/installers/interlok/$INTERLOK_VERSION
 ARG java_tool_opts
 ENV JAVA_TOOL_OPTIONS=$java_tool_opts
-# JAVA_HOME is set wrong on the latest 8-jre image.
-ENV JAVA_HOME=/usr/lib/jvm/zulu8
 
-RUN apk add --no-cache --update ca-certificates bash curl unzip su-exec && \
-    addgroup -S interlok && \
-    adduser -S interlok -G interlok && \
-    mkdir -p /opt/interlok/logs
 
-COPY scripts/suexec-docker-entrypoint.sh /docker-entrypoint.sh
+RUN apt-get -y -q update && \
+    apt-get install --no-install-recommends -y curl bash unzip ca-certificates gosu && \
+    groupadd -r interlok && \
+    useradd -r -g interlok interlok && \
+    rm -rf /var/lib/apt/lists/* && \
+    mkdir -p /opt/interlok/logs && \
+    gosu nobody true
+
+COPY scripts/gosu-docker-entrypoint.sh /docker-entrypoint.sh
 WORKDIR /opt/interlok
 
 RUN  \
