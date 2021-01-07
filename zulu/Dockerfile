@@ -3,7 +3,6 @@ FROM azul/zulu-openjdk:8
 LABEL maintainer="Adaptris"
 
 ARG BASE_URL=https://development.adaptris.net/installers/Interlok/latest-stable/
-ARG INTERLOK_VERSION=3.11-SNAPSHOT
 ARG java_tool_opts
 ENV JAVA_TOOL_OPTIONS=$java_tool_opts
 
@@ -26,7 +25,7 @@ RUN  \
     rm -rf *.zip && \
     cd /root/builder && \
     chmod +x /root/builder/gradlew && \
-    ./gradlew --no-daemon -PinterlokCoreVersion=${INTERLOK_VERSION} installDist && \
+    ./gradlew --no-daemon installDist && \
     rm -rf /root/.gradle && \
     rm -rf /root/builder
 
