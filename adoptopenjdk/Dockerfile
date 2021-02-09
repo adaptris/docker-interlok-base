@@ -1,4 +1,4 @@
-FROM adoptopenjdk:8-jdk
+FROM adoptopenjdk:11-jdk
 
 LABEL maintainer="Adaptris"
 
