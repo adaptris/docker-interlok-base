@@ -3,6 +3,7 @@ FROM openjdk:11-jdk-slim
 LABEL maintainer="Adaptris"
 
 ARG BASE_URL=https://development.adaptris.net/installers/Interlok/latest-stable/
+ARG CURL_ARGS=-fsSL
 ARG java_tool_opts
 ENV JAVA_TOOL_OPTIONS=$java_tool_opts
 
@@ -20,7 +21,7 @@ WORKDIR /opt/interlok
 COPY builder /root/builder
 
 RUN  \
-    curl -fsSL -o base-filesystem.zip -q ${BASE_URL}/base-filesystem.zip && \
+    curl ${CURL_ARGS} -o base-filesystem.zip -q ${BASE_URL}/base-filesystem.zip && \
     unzip -o -q  base-filesystem.zip config/* && \
     chmod +x /docker-entrypoint.sh && \
     rm -rf *.zip && \
