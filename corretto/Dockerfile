@@ -1,8 +1,8 @@
-FROM amazoncorretto:8
+FROM amazoncorretto:11
 
 LABEL maintainer="Adaptris"
 
-ARG INTERLOK_VERSION=3.12.0
+ARG INTERLOK_VERSION=4.0.0
 ARG BASE_URL=https://development.adaptris.net/installers/interlok/$INTERLOK_VERSION
 ARG CURL_ARGS=-FsSL
 ARG GOSU_VERSION=1.11
