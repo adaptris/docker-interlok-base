@@ -1,9 +1,10 @@
-FROM azul/zulu-openjdk-alpine:8
+FROM azul/zulu-openjdk-alpine:11
 
 LABEL maintainer="Adaptris"
 
-ARG INTERLOK_VERSION=3.12.0
+ARG INTERLOK_VERSION=4.0.0
 ARG BASE_URL=https://development.adaptris.net/installers/interlok/$INTERLOK_VERSION
+ARG CURL_ARGS=-FsSL
 ARG java_tool_opts
 ENV JAVA_TOOL_OPTIONS=$java_tool_opts
 # JAVA_HOME is set wrong on the latest 8-jre image.
@@ -18,9 +19,9 @@ COPY scripts/suexec-docker-entrypoint.sh /docker-entrypoint.sh
 WORKDIR /opt/interlok
 
 RUN  \
-    curl -fsSL -o base-filesystem.zip -q ${BASE_URL}/base-filesystem.zip && \
-    curl -fsSL -o runtime-libraries.zip -q ${BASE_URL}/runtime-libraries.zip && \
-    curl -fsSL -o javadocs.zip ${BASE_URL}/javadocs.zip && \
+    curl ${CURL_ARGS} -o base-filesystem.zip -q ${BASE_URL}/base-filesystem.zip && \
+    curl ${CURL_ARGS}  -o runtime-libraries.zip -q ${BASE_URL}/runtime-libraries.zip && \
+    curl ${CURL_ARGS}  -o javadocs.zip ${BASE_URL}/javadocs.zip && \
     unzip -o -q javadocs.zip && \
     unzip -o -q  base-filesystem.zip && \
     unzip -o -q runtime-libraries.zip && \
