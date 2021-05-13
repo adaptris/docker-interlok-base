@@ -8,7 +8,7 @@ ARG CURL_ARGS=-FsSL
 ARG java_tool_opts
 ENV JAVA_TOOL_OPTIONS=$java_tool_opts
 # JAVA_HOME is set wrong on the latest 8-jre image.
-ENV JAVA_HOME=/usr/lib/jvm/zulu8
+# ENV JAVA_HOME=/usr/lib/jvm/zulu8
 
 RUN apk add --no-cache --update ca-certificates bash curl unzip su-exec && \
     addgroup -S interlok && \
