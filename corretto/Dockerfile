@@ -2,7 +2,6 @@ FROM amazoncorretto:11
 
 LABEL maintainer="Adaptris"
 
-ARG BASE_URL=https://development.adaptris.net/installers/Interlok/latest-stable/
 ARG GOSU_VERSION=1.11
 ARG GOSU_BASE_URL=https://github.com/tianon/gosu/releases/download/
 ARG CURL_ARGS=-fsSL
@@ -32,13 +31,10 @@ WORKDIR /opt/interlok
 COPY builder /root/builder
 
 RUN  \
-    curl ${CURL_ARGS} -o base-filesystem.zip -q ${BASE_URL}/base-filesystem.zip && \
-    unzip -o -q  base-filesystem.zip config/* && \
     chmod +x /docker-entrypoint.sh && \
-    rm -rf *.zip && \
     cd /root/builder && \
     chmod +x /root/builder/gradlew && \
-    ./gradlew --no-daemon installDist && \
+    ./gradlew --no-daemon -PinterlokDistDirectory=/opt/interlok installDist && \
     rm -rf /root/.gradle && \
     rm -rf /root/builder
 
