@@ -2,11 +2,9 @@ FROM amazoncorretto:11
 
 LABEL maintainer="Adaptris"
 
-ARG INTERLOK_VERSION=4.0.0
-ARG BASE_URL=https://development.adaptris.net/installers/interlok/$INTERLOK_VERSION
-ARG CURL_ARGS=-FsSL
 ARG GOSU_VERSION=1.11
 ARG GOSU_BASE_URL=https://github.com/tianon/gosu/releases/download/
+ARG CURL_ARGS=-fsSL
 ARG java_tool_opts
 ENV JAVA_TOOL_OPTIONS=$java_tool_opts
 
@@ -30,18 +28,15 @@ RUN  \
 
 COPY scripts/gosu-docker-entrypoint.sh /docker-entrypoint.sh
 WORKDIR /opt/interlok
+COPY builder /root/builder
 
 RUN  \
-    curl ${CURL_ARGS} -o base-filesystem.zip -q ${BASE_URL}/base-filesystem.zip && \
-    curl ${CURL_ARGS} -o runtime-libraries.zip -q ${BASE_URL}/runtime-libraries.zip && \
-    curl ${CURL_ARGS} -o javadocs.zip ${BASE_URL}/javadocs.zip && \
-    unzip -o -q javadocs.zip && \
-    unzip -o -q  base-filesystem.zip && \
-    unzip -o -q runtime-libraries.zip && \
-    rm -rf /opt/interlok/optional && \
-    rm -rf /opt/interlok/docs/javadocs/optional && \
     chmod +x /docker-entrypoint.sh && \
-    rm -rf *.zip
+    cd /root/builder && \
+    chmod +x /root/builder/gradlew && \
+    ./gradlew --no-daemon -PinterlokDistDirectory=/opt/interlok installDist && \
+    rm -rf /root/.gradle && \
+    rm -rf /root/builder
 
 ENV JVM_ARGS=-Xmx1024m
 ENV JAVA_OPTS=-Dsun.net.inetaddr.ttl=30

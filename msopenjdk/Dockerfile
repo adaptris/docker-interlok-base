@@ -1,10 +1,9 @@
-FROM openjdk:11-jdk-slim
+FROM mcr.microsoft.com/openjdk/jdk:11-ubuntu
 
 LABEL maintainer="Adaptris"
 
 ARG java_tool_opts
 ENV JAVA_TOOL_OPTIONS=$java_tool_opts
-
 
 RUN apt-get -y -q update && \
     apt-get install --no-install-recommends -y curl bash unzip ca-certificates gosu && \
