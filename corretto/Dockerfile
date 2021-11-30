@@ -8,8 +8,8 @@ ARG CURL_ARGS=-fsSL
 ARG java_tool_opts
 ENV JAVA_TOOL_OPTIONS=$java_tool_opts
 
-RUN yum -y update && \
-    yum -y install curl unzip shadow-utils gnupg2 && \
+RUN yum -y --disablerepo=AmazonCorretto update && \
+    yum -y --disablerepo=AmazonCorretto install curl unzip shadow-utils gnupg2 && \
     useradd interlok && \
     yum -y remove shadow-utils audit-libs libcap-ng libsemanage ustr && \
     yum clean all
