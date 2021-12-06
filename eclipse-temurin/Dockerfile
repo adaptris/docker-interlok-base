@@ -4,8 +4,9 @@ ARG java_tool_opts
 ENV JAVA_TOOL_OPTIONS=$java_tool_opts
 
 
-RUN apt-get -y -q update && \
-    apt-get install --no-install-recommends -y curl bash unzip ca-certificates gosu && \
+RUN \
+    DEBIAN_FRONTEND=noninteractive apt-get -y -qq update && \
+    DEBIAN_FRONTEND=noninteractive apt-get --no-install-recommends -y -qq install curl bash unzip ca-certificates gosu && \
     groupadd -r interlok && \
     useradd -r -g interlok interlok && \
     rm -rf /var/lib/apt/lists/* && \
