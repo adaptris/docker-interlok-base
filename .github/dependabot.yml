@@ -8,7 +8,7 @@ registries:
 
 updates:
   - package-ecosystem: "gradle"
-    directory: "/"
+    directory: "/builder"
     open-pull-requests-limit: 20
     registries:
       - "interlok"
