@@ -21,7 +21,7 @@ RUN  \
     chmod +x /docker-entrypoint.sh && \
     cd /root/builder && \
     chmod +x /root/builder/gradlew && \
-    ./gradlew --no-daemon -PinterlokDistDirectory=/opt/interlok installDist && \
+    ./gradlew --no-watch-fs --no-daemon -PinterlokDistDirectory=/opt/interlok installDist && \
     rm -rf /root/.gradle && \
     rm -rf /root/builder
 
