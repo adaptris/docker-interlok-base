@@ -9,6 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        docker_target: [ 'eclipse-temurin::linux/amd64,linux/arm64,linux/arm/v7', 'liberica-alpine:-liberica-alpine:linux/amd64,linux/arm64' ]
     steps:
     - name: Checkout
       uses: actions/checkout@v2.4.0
@@ -21,14 +24,11 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_USER }}
         password: ${{ secrets.DOCKER_TOKEN }}
-    - name: Docker buildx
+    - name: Docker buildx ${{ matrix.docker_target }}
       run: |
-        DOCKER_TARGETS=("eclipse-temurin" "liberica-alpine" "graalvm")
-        DOCKER_IMAGE_SUFFIX=("" "-liberica-alpine" "-graalvm")
-        DOCKER_IMAGE_PREFIX="lewinc/interlok-base"
-        TARGET_PLATFORMS=("linux/amd64,linux/arm64,linux/arm/v7" "linux/amd64,linux/arm64" "linux/amd64,linux/arm64")
-        for (( j=0; j<${#DOCKER_TARGETS[@]}; j++ ));
-        do
-          echo "-------- ${DOCKER_TARGETS[$j]}(${TARGET_PLATFORMS[$j]})"
-          docker buildx build . --no-cache --platform ${TARGET_PLATFORMS[$j]} -t "$DOCKER_IMAGE_PREFIX:snapshot${DOCKER_IMAGE_SUFFIX[$j]}" -f "${DOCKER_TARGETS[$j]}/Dockerfile" --push
-        done
+        DOCKER_FILE=$(echo "${{ matrix.docker_target }}" | cut -f1 -d:)/Dockerfile
+        DOCKER_IMAGE=lewinc/interlok-base:snapshot$(echo "${{ matrix.docker_target }}" | cut -f2 -d:)
+        DOCKER_PLATFORM=$(echo "${{ matrix.docker_target }}" | cut -f3 -d:)
+        echo "-------- Building ${DOCKER_IMAGE}(${DOCKER_PLATFORM}) using ${DOCKER_FILE}"
+        docker buildx build . --no-cache --platform ${DOCKER_PLATFORM} -t "${DOCKER_IMAGE}" -f "${DOCKER_FILE}" --push
+        echo "-------- Finished ${DOCKER_IMAGE}(${DOCKER_PLATFORM})"
