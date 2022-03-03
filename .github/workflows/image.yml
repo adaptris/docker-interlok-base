@@ -11,7 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        docker_target: [ 'eclipse-temurin::linux/amd64,linux/arm64', 'liberica-alpine:-liberica-alpine:linux/amd64,linux/arm64', 'graalvm:-graalvm:linux/amd64,linux/arm64']
+        docker_target: [ 'eclipse-temurin::linux/amd64,linux/arm64',
+                         'liberica-alpine:-liberica-alpine:linux/amd64,linux/arm64',
+                         'corretto:-corretto:linux/amd64,linux/arm64',
+                         'graalvm:-graalvm:linux/amd64,linux/arm64']
     steps:
     - name: Checkout
       uses: actions/checkout@v2.4.0
@@ -24,11 +27,22 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_USER }}
         password: ${{ secrets.DOCKER_TOKEN }}
-    - name: Docker buildx ${{ matrix.docker_target }}
+    - name: Docker Image Info
+      id: docker_image
       run: |
         DOCKER_FILE=$(echo "${{ matrix.docker_target }}" | cut -f1 -d:)/Dockerfile
         DOCKER_IMAGE=lewinc/interlok-base:snapshot$(echo "${{ matrix.docker_target }}" | cut -f2 -d:)
         DOCKER_PLATFORM=$(echo "${{ matrix.docker_target }}" | cut -f3 -d:)
-        echo "-------- Building ${DOCKER_IMAGE}(${DOCKER_PLATFORM}) using ${DOCKER_FILE}"
-        docker buildx build . --no-cache --platform ${DOCKER_PLATFORM} -t "${DOCKER_IMAGE}" -f "${DOCKER_FILE}" --push
-        echo "-------- Finished ${DOCKER_IMAGE}(${DOCKER_PLATFORM})"
+        echo ::set-output name=docker_file::${DOCKER_FILE}
+        echo ::set-output name=docker_tags::${DOCKER_IMAGE}
+        echo ::set-output name=docker_platform::${DOCKER_PLATFORM}
+    - name: Build Image
+      uses: docker/build-push-action@v2
+      with:
+        # no-cache: true
+        builder: ${{ steps.buildx.outputs.name }}
+        context: .
+        file: ${{ steps.docker_image.outputs.docker_file }}
+        platforms: ${{ steps.docker_image.outputs.docker_platform }}
+        push: true
+        tags: ${{ steps.docker_image.outputs.docker_tags }}
