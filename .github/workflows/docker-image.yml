@@ -1,13 +1,15 @@
-name: Docker
+name: docker-image
 
 on:
-  push:
-    branches: snapshot
-  schedule:
-    - cron: '15 05 * * SUN'
+  workflow_call:
+    secrets:
+      DOCKER_USER:
+        required: true
+      DOCKER_TOKEN:
+        required: true
 
 jobs:
-  build:
+  docker-image:
     runs-on: ubuntu-latest
     strategy:
       matrix:
