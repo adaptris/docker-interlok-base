@@ -1,0 +1,15 @@
+name: docker-latest-snapshot
+
+on:
+  push:
+    branches: snapshot
+  schedule:
+    - cron: '15 05 * * SUN'
+
+jobs:
+  build:
+    if: ${{ github.actor != 'dependabot[bot]' }}
+    uses: ./.github/workflows/docker-image.yml
+    secrets:
+      DOCKER_USER: ${{ secrets.DOCKER_USER }}
+      DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
