@@ -1,0 +1,15 @@
+name: is-dependabot
+on:
+  push:
+    branches: snapshot
+
+# Dependabot doesn't have access to secrets
+# when they instigate a standard PR github action.
+# https://github.com/dependabot/dependabot-core/issues/3253#issuecomment-852541544
+# This then triggers dependabot-build.yml
+jobs:
+  is-dependabot:
+    runs-on: ubuntu-latest
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    steps:
+      - run: echo "PR created by Dependabot"
