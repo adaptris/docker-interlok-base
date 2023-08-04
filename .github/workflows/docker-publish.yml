@@ -31,7 +31,7 @@ jobs:
               return "adaptris/interlok-base:" + tag + "-${{ matrix.dist }}";
             }
             var tags = buildFullTag("snapshot");
-            if (${{ github.event_name }} != 'pull_request') {
+            if ('${{ github.event_name }}' != 'pull_request') {
               tags = buildFullTag("${{ github.ref_name }}") + "," + buildFullTag("latest");
             }
             return tags
