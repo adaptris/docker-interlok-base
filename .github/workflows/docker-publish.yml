@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - snapshot
+      - INTERLOK-4084-docker-publish-action
     # A tag will build and publish the Docker images
     tags: [ '*.*.*' ]
   pull_request:
@@ -16,20 +17,29 @@ jobs:
         dist: [corretto, debian, zulu, zulu-alpine, adoptopenjdk, msopenjdk]
 
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-      # This is used to complete the identity challenge
-      # with sigstore/fulcio when running outside of PRs.
-      id-token: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Get Tags
+        id: get-tags
+        uses: actions/github-script@v6
+        with:
+          script: |
+            function buildFullTag(tag) {
+              return "adaptris/interlok-base:" + tag + "-${{ matrix.dist }}";
+            }
+            var tags = buildFullTag("snapshot");
+            if (${{ github.event_name }} != 'pull_request') {
+              tags = buildFullTag("${{ github.ref_name }}") + "," + buildFullTag("latest");
+            }
+            return tags
+          result-encoding: string
+
       - name: Echo
         run: |
-          echo "Build and publish Docker image: adaptris/interlok-base:${{ github.ref_name || 'snapshot' }}-${{ matrix.dist }}"
+          echo "Build and publish Docker image: adaptris/interlok-base:${{ steps.get-tag.outputs.result }}-${{ matrix.dist }}"
 
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -47,7 +57,7 @@ jobs:
         with:
           file: ./${{ matrix.dist }}/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
-          tags: adaptris/interlok-base:${{ github.ref_name || 'snapshot' }}-${{ matrix.dist }}
+          tags: ${{ steps.get-tags.outputs.result }
           labels: interlok
           cache-from: type=gha
           cache-to: type=gha,mode=max
