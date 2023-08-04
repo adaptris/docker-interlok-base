@@ -52,5 +52,5 @@ jobs:
           push: false
           tags: adaptris/interlok-base:${{ github.ref_name || 'snapshot' }}-${{ matrix.dist }}
           labels: interlok
-          # cache-from: type=gha
-          # cache-to: type=gha,mode=max
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
