@@ -2,9 +2,9 @@ name: Docker Publish
 
 on:
   push:
-    branches-ignore:
-      - release
-    # Publish semver tags as releases.
+    branches:
+      - snapshot
+    # A tag will build and publish the Docker images
     tags: [ '*.*.*' ]
   pull_request:
     branches: [ "snapshot" ]
@@ -29,9 +29,7 @@ jobs:
 
       - name: Echo
         run: |
-          echo ${{ github.event_name != 'pull_request' }}
-          echo ${{ github.head_ref }}
-          echo adaptris/interlok-base:${{ github.ref_name || 'snapshot' }}-${{ matrix.dist }}
+          echo "Build and publish Docker image: adaptris/interlok-base:${{ github.ref_name || 'snapshot' }}-${{ matrix.dist }}"
 
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -48,8 +46,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           file: ./${{ matrix.dist }}/Dockerfile
-          # push: ${{ github.event_name != 'pull_request' }}
-          push: false
+          push: ${{ github.event_name != 'pull_request' }}
           tags: adaptris/interlok-base:${{ github.ref_name || 'snapshot' }}-${{ matrix.dist }}
           labels: interlok
           cache-from: type=gha
