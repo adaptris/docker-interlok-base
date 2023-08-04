@@ -48,7 +48,8 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./${{ matrix.dist }}
-          push: false#${{ github.event_name != 'pull_request' }}
+          # push: ${{ github.event_name != 'pull_request' }}
+          push: false
           tags: adaptris/interlok-base:${{ github.ref_name || 'snapshot' }}-${{ matrix.dist }}
           labels: interlok
           cache-from: type=gha
