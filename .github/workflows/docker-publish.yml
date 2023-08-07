@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - snapshot
-      - INTERLOK-4084-docker-publish-action
     # A tag will build and publish the Docker images
     tags: [ '*.*.*' ]
   pull_request:
