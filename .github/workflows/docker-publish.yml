@@ -32,7 +32,7 @@ jobs:
             }
             var tags = buildFullTag("snapshot");
             // TODO need to check if it's a tag
-            if ('${{ github.event_name }}' != 'pull_request') {
+            if ('${{ github.ref_type }}' == 'tag') {
               tags = buildFullTag("${{ github.ref_name }}") + "," + buildFullTag("latest");
             }
             return tags
@@ -40,7 +40,7 @@ jobs:
 
       - name: Echo
         run: |
-          echo "Build and publish Docker image: ${{ steps.get-tags.outputs.result }}"
+          echo "Build and publish Docker image: ${{ steps.get-tags.outputs.result }} - ${{ github.ref_type }}"
 
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v2
