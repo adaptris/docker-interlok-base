@@ -30,7 +30,6 @@ jobs:
               return "adaptris/interlok-base:" + tag + "-${{ matrix.dist }}";
             }
             var tags = buildFullTag("snapshot");
-            // TODO need to check if it's a tag
             if ('${{ github.ref_type }}' == 'tag') {
               tags = buildFullTag("${{ github.ref_name }}") + "," + buildFullTag("latest");
             }
@@ -39,7 +38,7 @@ jobs:
 
       - name: Echo
         run: |
-          echo "Build and publish Docker image: ${{ steps.get-tags.outputs.result }} - ${{ github.ref_type }}"
+          echo "Build Docker image: ${{ steps.get-tags.outputs.result }}, Publish: ${{ github.event_name != 'pull_request' }}"
 
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v2
