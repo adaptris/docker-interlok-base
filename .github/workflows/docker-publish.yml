@@ -27,7 +27,7 @@ jobs:
         with:
           script: |
             function buildFullTag(tag) {
-              return "adaptris/interlok:" + tag + "-${{ matrix.dist }}";
+              return "adaptris/interlok-base:" + tag + "-${{ matrix.dist }}";
             }
             var artifactAndTags = [];
             var tag = "snapshot";
