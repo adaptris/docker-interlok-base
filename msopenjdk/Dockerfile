@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/openjdk/jdk:11-ubuntu
+FROM mcr.microsoft.com/openjdk/jdk:17-ubuntu
 
 LABEL maintainer="Adaptris"
 
