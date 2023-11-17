@@ -7,11 +7,13 @@ ARG GOSU_BASE_URL=https://github.com/tianon/gosu/releases/download/
 ARG CURL_ARGS=-fsSL
 ARG java_tool_opts
 ENV JAVA_TOOL_OPTIONS=$java_tool_opts
+# JAVA_HOME is set to /usr/lib/jvm/java-17-amazon-corretto which doesn't exist so we override it
+ENV JAVA_HOME=/usr/lib/jvm/java-17-amazon-corretto.x86_64
 
 RUN yum -y --disablerepo=AmazonCorretto update && \
     yum -y --disablerepo=AmazonCorretto install curl unzip shadow-utils gnupg2 && \
     useradd interlok && \
-    yum -y remove shadow-utils audit-libs libcap-ng libsemanage ustr && \
+#    yum -y remove shadow-utils audit-libs libcap-ng libsemanage ustr && \
     yum clean all
 
 # Install, since we know corretto is x86_64; we will use the gosu-amd64 rather than try
