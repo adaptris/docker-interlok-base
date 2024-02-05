@@ -27,7 +27,7 @@ updates:
       - dependency-type: "all"
     labels:
       - "github_actions"
-      - "release"
+      - "snapshot"
     reviewers:
       - aaron-mcgrath-adp
       - sebastien-belin-adp
@@ -38,7 +38,7 @@ updates:
     open-pull-requests-limit: 20
     schedule:
       interval: "weekly"
-    target-branch: "release-v4"
+    target-branch: "release"
     allow:
       - dependency-type: "all"
     labels:
