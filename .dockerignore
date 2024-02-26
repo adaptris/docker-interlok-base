@@ -1,5 +1,3 @@
-builder/build
-builder/.gradle
 .dependabot
 .git
 .gitattributes
