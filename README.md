@@ -1,13 +1,16 @@
-# Interlok base image for Docker Hub [![Docker Pulls](https://img.shields.io/docker/pulls/adaptris/interlok-base.svg)](https://hub.docker.com/r/adaptris/interlok-base/)
+# Docker Interlok Base
 
-Base Docker image of the adapter using a nightly build
+[![Docker Pulls](https://img.shields.io/docker/pulls/adaptris/interlok-base.svg)](https://hub.docker.com/r/adaptris/interlok-base/)
 
-* Installed to /opt/interlok
+Base Docker image ready to install Interlok
+
+* interlok user created.
+* Dir /opt/interlok and sub dirs config, logs, webapps and ui-resources created.
 * Various distribution platforms are defined in the corresponding sub directories.
 
 ## Notes
 
-This image does not expose any ports or volumes; so you will need to expose those yourself when building your own docker image.
+This image does not have any instance of Interlok installed. This is a base to build your own docker image.
 
 Our suggestions would be to
 
@@ -17,4 +20,17 @@ Our suggestions would be to
     * /opt/interlok/logs  -> for logging; if you're using log4j logging to diskk
     * /opt/interlok/ui-resources -> for preserving templates and saved projects.
 
+## Example:
 
+Considering that you have an Interlok config project assembled to an instance in `./build/distribution`.
+
+Dockerfile:
+
+```
+FROM adaptris/interlok-base:latest-debian
+
+COPY ./build/distribution /opt/interlok
+
+EXPOSE 8080 5555
+VOLUME [ "/opt/interlok/config", "/opt/interlok/logs" , "/opt/interlok/ui-resources" ]
+```
