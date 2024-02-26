@@ -1,5 +1,6 @@
 # Docker Interlok Base
 
+[![Docker Publish](https://github.com/adaptris/docker-interlok-base/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/adaptris/docker-interlok-base/actions/workflows/docker-publish.yml)
 [![Docker Pulls](https://img.shields.io/docker/pulls/adaptris/interlok-base.svg)](https://hub.docker.com/r/adaptris/interlok-base/)
 
 Base Docker image ready to install Interlok
