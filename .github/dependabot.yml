@@ -1,17 +1,6 @@
 version: 2
 
 updates:
-  - package-ecosystem: "gradle"
-    directory: "/builder"
-    schedule:
-      interval: "weekly"
-    allow:
-      - dependency-type: "all"
-    reviewers:
-      - aaron-mcgrath-adp
-      - sebastien-belin-adp
-      - higgyfella
-
   - package-ecosystem: "github-actions"
     directory: "/"
     open-pull-requests-limit: 20
